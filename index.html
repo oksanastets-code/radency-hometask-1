@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List of notes</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <table class="notes-table js-notes-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Category</th>
+          <th>Content</th>
+          <th>Dates</th>
+          <th>Edit</th>
+          <th>Save</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+    </table>
+    <button type="button" class="create__button" data-action="open-form">Create Note</button>
+    <table class="summary-table js-summary-table">
+      <tr>
+        <th></th>
+        <th>Note Category</th>
+        <th>Active</th>
+        <th>Archived</th>
+      </tr>
+    </table>
+<!-- Проба -->
+
+ <!-- Событие сабмита формы -->
+    <!-- <form class="js-register-form" autocomplete="off">
+      <div role="group">
+        <label>
+          Почта
+          <input type="email" name="email" />
+        </label>
+        <label>
+          Пароль
+          <input name="password" type="password" />
+        </label>
+      </div>
+
+      <br />
+      <div role="group">
+        <b>Тип подписки:</b>
+        <label>
+          <input type="radio" name="subscription" value="free" />
+          Free
+        </label>
+        <label>
+          <input type="radio" name="subscription" value="basic" />
+          Basic
+        </label>
+        <label>
+          <input type="radio" name="subscription" value="pro" />
+          Pro
+        </label>
+      </div>
+
+      <br />
+      <button type="submit">Зарегистрироваться</button>
+    </form> -->
+
+
+<!-- Проба -->
+
+
+
+    <!-- Модалка для вводу нової записки -->
+    <div class="lightbox js-lightbox">
+      <div class="lightbox__overlay"></div>
+
+      <div class="lightbox__content">
+        <form action="" class="note-form" autocomplete="off">
+          <label
+            >Name
+            <input type="text" 
+            placeholder="Name"
+            name="name"
+            data-action="name-input" />
+          </label>
+          <label
+            >Category
+            <input list="categories"
+            data-action="categ-input" />
+            <datalist id="categories">
+              <option value="Task">Task</option>
+              <option value="Random Thought">Random Thought</option>
+              <option value="Idea">Idea</option>
+              <option value="Quote">Quote</option>
+            </datalist>
+          </label>
+          <label
+            >Content
+            <input type="text"
+            placeholder="Content"
+            name="content"
+            data-action="content-input" />
+          </label>
+
+          <button type="submit" class="" data-action="add-note">Додати</button>
+        </form>
+      </div>
+
+      <button type="button" class="lightbox__button" data-action="close-form">.</button>
+    </div>
+
+    <script src="./index.js" type="module"></script>
+  </body>
+</html>
