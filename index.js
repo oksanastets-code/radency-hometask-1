@@ -67,24 +67,27 @@ function onCloseForm() {
 
 const addNoteBtn = document.querySelector('[data-action="add-note"]');
 addNoteBtn.addEventListener('click', onSubmit);
+
 const addNoteForm = document.querySelector('.note-form');
+addNoteForm.addEventListener('submit', onSubmit);
+// inputs
 const nameInputField = document.querySelector('[data-action="name-input"]');
-nameInputField.addEventListener('input', onInput)
+nameInputField.addEventListener('blur', onInput);
+
+const categInputField = document.querySelector('[data-action="categ-input"]');
+categInputField.addEventListener('blur', onInput);
+
 const contentInputField = document.querySelector('[data-action="content-input"]');
-contentInputField.addEventListener('input', onInput)
+contentInputField.addEventListener('blur', onInput);
+
 function onInput(e) {
     console.log(e.currentTarget.name, e.currentTarget.value);
 }
-// const onlyInputs = document.querySelectorAll('.note-form input');
-// onlyInputs.addEventListener('input', (e)=>console.log(e.currentTarget.value);)
-addNoteForm.addEventListener('submit', onSubmit);
-
-
 
 function onSubmit(event) {
     event.preventDefault();
      
   console.log('Клик по целевой кнопке');
-
+    addNoteForm.reset();
   
 }
