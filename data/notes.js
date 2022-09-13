@@ -49,13 +49,13 @@ export default [
         name: 'Theatre',
         created: 'May 20, 2021',
         category: 'Random Thought',
-        content: 'Sweet Darusia on 2/6/2021',
+        content: 'Sweet Home on 2/6/2021',
         dates: '',
         active: true
     },
     {
         id: 7,
-        name: 'Oscar Wild',
+        name: 'Oscar Wilde',
         created: 'May 05, 2021',
         category: 'Quote',
         content: 'Always forgive your enemies; nothing annoys them so much.',

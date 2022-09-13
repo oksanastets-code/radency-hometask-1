@@ -5,7 +5,7 @@ const makeNotesTableRowMarkup = note => {
 
     return `
   
-     <tr>
+        <tr>
           <td></td>
           <td>${name}</td>
           <td>${created}</td>
@@ -43,51 +43,28 @@ function onCloseForm() {
     lightbox.classList.remove('is-open')
 }
 
-// форма
-
-// const form = document.querySelector('.js-register-form');
-
-// form.addEventListener('submit', onFormSubmit);
-
-// function onFormSubmit(event) {
-//   event.preventDefault();
-
-//   const formData = new FormData(event.currentTarget);
-
-//   console.log(formData);
-
-//   formData.forEach((value, name) => {
-//     console.log('onFormSubmit -> name', name);
-//     console.log('onFormSubmit -> value', value);
-//   });
-// }
-
-
-
-
-const addNoteBtn = document.querySelector('[data-action="add-note"]');
-addNoteBtn.addEventListener('click', onSubmit);
 
 const addNoteForm = document.querySelector('.note-form');
 addNoteForm.addEventListener('submit', onSubmit);
-// inputs
-const nameInputField = document.querySelector('[data-action="name-input"]');
-nameInputField.addEventListener('blur', onInput);
-
-const categInputField = document.querySelector('[data-action="categ-input"]');
-categInputField.addEventListener('blur', onInput);
-
-const contentInputField = document.querySelector('[data-action="content-input"]');
-contentInputField.addEventListener('blur', onInput);
-
-function onInput(e) {
-    console.log(e.currentTarget.name, e.currentTarget.value);
-}
 
 function onSubmit(event) {
     event.preventDefault();
-     
-  console.log('Клик по целевой кнопке');
+    const formElements = event.currentTarget.elements;
+    const name = formElements.name.value;
+    const created = formElements.created.value;
+    const category = formElements.categ.value;
+    const content = formElements.content.value;
+
+    const newNote = {
+        name,
+        created,
+        category,
+        content,
+    }
+    const newNoteRow = makeNotesTableRowMarkup(newNote);
+    // console.log(newNote);
+    // console.log(makeNotesTableRowMarkup(newNote));
+    tableEl.insertAdjacentHTML('beforeend', newNoteRow);
     addNoteForm.reset();
-  
+    onCloseForm();
 }
