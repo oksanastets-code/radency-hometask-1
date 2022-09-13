@@ -12,12 +12,16 @@ const makeNotesTableRowMarkup = note => {
           <td>${category}</td>
           <td>${content}</td>
           <td>Dates</td>
-          <td>Edit</td>
-          <td>Save</td>
-          <td>Remove</td>
+          <td>
+            <button>Edit</button>
+            <button>Archive</button>
+            <button type="button" class="delete__button">Delete</button>
+          </td>
+          
         </tr>
   
   `;
+    
 };
 
 const tableEl = document.querySelector('.js-notes-table');
@@ -43,9 +47,11 @@ function onCloseForm() {
     lightbox.classList.remove('is-open')
 }
 
-
+// додавання нового запису
 const addNoteForm = document.querySelector('.note-form');
 addNoteForm.addEventListener('submit', onSubmit);
+
+let deleteNoteBtn = document.querySelectorAll('.delete__button');
 
 function onSubmit(event) {
     event.preventDefault();
@@ -62,9 +68,20 @@ function onSubmit(event) {
         content,
     }
     const newNoteRow = makeNotesTableRowMarkup(newNote);
-    // console.log(newNote);
-    // console.log(makeNotesTableRowMarkup(newNote));
-    tableEl.insertAdjacentHTML('beforeend', newNoteRow);
+    const tbodyEl = document.querySelector('tbody')
+    tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
+    deleteNoteBtn = document.querySelectorAll('.delete__button');
+    console.log(deleteNoteBtn);
     addNoteForm.reset();
     onCloseForm();
+    return deleteNoteBtn;
+}
+// видалення запису
+// const deleteNoteBtn = document.querySelectorAll('.delete__button');
+console.log(deleteNoteBtn);
+for (let i = 0; i < deleteNoteBtn.length; i++) {
+    deleteNoteBtn[i].onclick = function () {
+        let parent = this.parentNode;
+        parent.parentNode.remove();
+    }
 }
