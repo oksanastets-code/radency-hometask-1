@@ -1,16 +1,16 @@
 import notesList from './data/notes.js';
 // рендер таблиці
 const makeNotesTableRowMarkup = note => {
-  const { name, created, category, content } = note;
+    const { name, created, category, content, dates } = note;
 
-  return `  
+    return `  
         <tr>
           <td></td>
           <td>${name}</td>
           <td>${created}</td>
           <td>${category}</td>
           <td>${content}</td>
-          <td>Dates</td>
+          <td>${dates}</td>
           <td>
             <button>Edit</button>
             <button>Archive</button>
@@ -60,15 +60,36 @@ function onSubmit(event) {
 
   const name = formElements.name.value;
   const category = formElements.categ.value;
-  const content = formElements.content.value;
 
+  const content = formElements.content.value;
+  const regex = /^(0?[1-9]|1[0-2]).?\/?(0?[1-9]|[12][0-9]|3[01]).?\/?\d{4}$/;
+
+    
+    
+    
+  let foundedDates = [];
+  const founded = content.split(' ').forEach(str => {
+    const matches_array = str.match(regex);
+    console.log(matches_array);
+    if (matches_array) {
+      foundedDates.push(matches_array[0]);
+    }
+  });
+  console.log(foundedDates);
+  const dates = foundedDates.join(', ');
+
+    
+
+    
+    
   const newNote = {
     name,
     created,
     category,
     content,
+    dates,
   };
-  
+
   const newNoteRow = makeNotesTableRowMarkup(newNote);
   const tbodyEl = document.querySelector('tbody');
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
@@ -90,5 +111,3 @@ function onDel(event) {
     }
   }
 }
-const notesDate = new Date();
-console.log(notesDate.toLocaleDateString());
