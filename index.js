@@ -48,8 +48,17 @@ addNoteForm.addEventListener('submit', onSubmit);
 function onSubmit(event) {
   event.preventDefault();
   const formElements = event.currentTarget.elements;
+
+  const notesDate = new Date();
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  let created = formElements.created.value;
+  created = notesDate.toLocaleDateString('en-US', options);
+
   const name = formElements.name.value;
-  const created = formElements.created.value;
   const category = formElements.categ.value;
   const content = formElements.content.value;
 
@@ -59,6 +68,7 @@ function onSubmit(event) {
     category,
     content,
   };
+  
   const newNoteRow = makeNotesTableRowMarkup(newNote);
   const tbodyEl = document.querySelector('tbody');
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
@@ -80,3 +90,5 @@ function onDel(event) {
     }
   }
 }
+const notesDate = new Date();
+console.log(notesDate.toLocaleDateString());
