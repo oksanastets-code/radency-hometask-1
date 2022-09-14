@@ -1,9 +1,9 @@
 import notesList from './data/notes.js';
 // рендер таблиці
 const makeNotesTableRowMarkup = note => {
-    const { name, created, category, content, dates } = note;
-
-    return `  
+  let { name, created, category, content, dates = '' } = note;
+  dates = getDates(content);
+  return `  
         <tr>
           <td></td>
           <td>${name}</td>
@@ -62,32 +62,15 @@ function onSubmit(event) {
   const category = formElements.categ.value;
 
   const content = formElements.content.value;
-  const regex = /^(0?[1-9]|1[0-2]).?\/?(0?[1-9]|[12][0-9]|3[01]).?\/?\d{4}$/;
 
-    
-    
-    
-  let foundedDates = [];
-  const founded = content.split(' ').forEach(str => {
-    const matches_array = str.match(regex);
-    console.log(matches_array);
-    if (matches_array) {
-      foundedDates.push(matches_array[0]);
-    }
-  });
-  console.log(foundedDates);
-  const dates = foundedDates.join(', ');
+  //  const dates = getDates(content);
 
-    
-
-    
-    
   const newNote = {
     name,
     created,
     category,
     content,
-    dates,
+    dates: '',
   };
 
   const newNoteRow = makeNotesTableRowMarkup(newNote);
@@ -100,7 +83,7 @@ function onSubmit(event) {
 // видалення запису
 
 tableEl.addEventListener('click', onDel);
-function onDel(event) {
+async function onDel(event) {
   if (event.target.classList.value === 'delete__button') {
     const deleteNoteBtn = document.querySelectorAll('.delete__button');
     for (let i = 0; i < deleteNoteBtn.length; i++) {
@@ -110,4 +93,18 @@ function onDel(event) {
       };
     }
   }
+}
+// вибрати дати з контенту
+function getDates(str) {
+  const regex = /^(0?[1-9]|1[0-2]).?\/?(0?[1-9]|[12][0-9]|3[01]).?\/?\d{4}$/;
+  let foundedDates = [];
+  str.split(' ').forEach(s => {
+    const matches_array = s.match(regex);
+    // console.log(matches_array);
+    if (matches_array) {
+      foundedDates.push(matches_array[0]);
+    }
+  });
+  //   console.log(foundedDates);
+  return foundedDates.join(', ');
 }
