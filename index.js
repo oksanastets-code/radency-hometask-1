@@ -5,7 +5,7 @@ const makeNotesTableRowMarkup = note => {
   dates = getDates(content);
   return `  
         <tr>
-          <td></td>
+         
           <td>${name}</td>
           <td>${created}</td>
           <td class="js-categories">${category}</td>
@@ -92,16 +92,18 @@ function onDel(event) {
 // архівування запису
 tableEl.addEventListener('click', onArch);
 function onArch(event) {
-    if (event.target.className === 'archieve__button') {
-       
+  if (event.target.className === 'archieve__button') {
     const archiveNoteBtn = document.querySelectorAll('.archieve__button');
     for (let i = 0; i < archiveNoteBtn.length; i++) {
       archiveNoteBtn[i].onclick = function () {
         let parent = this.parentNode;
-        parent.parentNode.classList.add('visually-hidden');
+        //   parent.parentNode.classList.add('visually-hidden');
+        parent.parentNode.style.display = 'none';
+        parent.parentNode.dataset.status = 'archieved';
       };
     }
   }
+  makeSummaryTableRowData();
 }
 
 // згенерувати дату
@@ -127,15 +129,91 @@ function getDates(str) {
   });
   return foundedDates.join(', ');
 }
-// summary table
-const tbodyEl = document.querySelector('.js-notes-table tbody');
-console.log(tbodyEl);
-const tbodyElRows = [...tbodyEl.children];
-console.log(tbodyElRows);
-const count = tbodyElRows.map(item => {
-    const tdArray = [...item.children];
-    console.log(tdArray[3]);
-    tdArray.forEach(td => {
-       
-     } )
-})
+
+// рендер підсумкової таблиці
+
+const tds = [...document.querySelectorAll('.js-categories')];
+const summaryData = [
+  {
+    option: 'Task',
+    active: 3,
+    archieved: 5,
+  },
+  {
+    option: 'Random Thought',
+    active: 5,
+    archieved: 12,
+  },
+  {
+    option: 'Idea',
+    active: 6,
+    archieved: 0,
+  },
+];
+const makeSummaryTableRowMarkup = data => {
+  let { option, active, archieved } = data;
+
+  return `  
+        <tr>
+         
+          <td>${option}</td>
+          <td>${active}</td>
+          <td>${archieved}</td>
+          
+        </tr>
+  `;
+};
+
+const summaryTableEl = document.querySelector('.js-summary-table');
+const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
+
+summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
+
+const optionsArray = [...document.getElementById('categories').children].map(
+  option => option.value,
+);
+console.log(optionsArray);
+
+function makeSummaryTableRowData() {
+  optionsArray.map(item => {
+    countNotesByCategoryAndStatus(tds, item);
+  });
+}
+
+function countNotesByCategoryAndStatus(array, string) {
+  const arrayByCategory = array.filter(td => {
+    return td.textContent === string;
+  });
+  // console.log(string, arrayByCategory.length);
+  let activeArray = [];
+    let archievedArray = [];
+    const summaryData = [];
+  const arrayByCategoryActive = arrayByCategory.filter(item => {
+    // const parentEl = item.parentElement;
+    // console.log(item.parentElement.hasAttribute('data-status'));
+    // console.log(item.parentElement);
+    // console.log(parentEl.hasAttribute('data-status'));
+    if (item.parentElement.hasAttribute('data-status')) {
+      archievedArray.push(item.parentElement);
+    }
+    if (!item.parentElement.hasAttribute('data-status')) {
+      activeArray.push(item.parentElement);
+    }
+  });
+    
+  const newSummaryRowData = {};
+  newSummaryRowData.option = string;
+  newSummaryRowData.active = activeArray.length;
+  newSummaryRowData.archieved = archievedArray.length;
+    console.log(newSummaryRowData);
+    summaryData.push(newSummaryRowData);
+    console.log(summaryData);
+    
+    //   const newSummaryRow = makeSummaryTableRowMarkup(newSummaryRowData);
+    //   summaryTableEl.insertAdjacentHTML('beforeend', newSummaryRow);
+    
+    //   console.log(string, archievedArray, activeArray);
+    return summaryData;
+}
+
+// makeSummaryTableRowData();
