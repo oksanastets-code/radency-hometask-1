@@ -53,13 +53,14 @@ function onSubmit(event) {
   const category = formElements.categ.value;
   const content = formElements.content.value;
 
-  makeNewNote(name, category, content);
+  renderNewNote(name, category, content);
 
   addNoteForm.reset();
   onCloseForm();
+  renderSummaryTable();
 }
 
-function makeNewNote(name, category, content) {
+function renderNewNote(name, category, content) {
   const newNote = {
     name,
     category,
@@ -86,8 +87,8 @@ function onDel(event) {
         let parent = this.parentNode;
         parent.parentNode.remove();
       };
-      }
-      renderSummaryTable();
+    }
+    renderSummaryTable();
   }
 }
 // архівування запису
@@ -104,7 +105,7 @@ function onArch(event) {
         parent.parentNode.dataset.status = 'archieved';
       };
     }
-      renderSummaryTable();
+    renderSummaryTable();
   }
 }
 
@@ -133,8 +134,10 @@ function getDates(str) {
 }
 
 // рендер підсумкової таблиці
-
-const tds = [...document.querySelectorAll('.js-categories')];
+const tds = () => {
+  const arrayOfTds = [...document.querySelectorAll('.js-categories')];
+  return arrayOfTds;
+};
 
 const makeSummaryTableRowMarkup = data => {
   let { option, active, archieved } = data;
@@ -151,7 +154,6 @@ const makeSummaryTableRowMarkup = data => {
 const optionsArray = [...document.getElementById('categories').children].map(
   option => option.value,
 );
-console.log(optionsArray);
 
 function makeSummaryTableRowData() {
   optionsArray.map(item => {
@@ -159,11 +161,12 @@ function makeSummaryTableRowData() {
   });
 }
 
-function countNotesByCategoryAndStatus(array, option) {
+function countNotesByCategoryAndStatus(callback, option) {
+  const array = callback();
   const arrayByCategory = array.filter(td => {
     return td.textContent === option;
   });
-
+  console.log(arrayByCategory);
   let activeArray = [];
   let archievedArray = [];
 
@@ -188,13 +191,12 @@ function countNotesByCategoryAndStatus(array, option) {
 
 let summaryData = [];
 function renderSummaryTable() {
-    summaryData = [];
-    makeSummaryTableRowData();
-    const summaryTableEl = document.querySelector('.js-summary-table');
-    const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
-    if ([...summaryTableEl.children].length > 1) { summaryTableEl.lastElementChild.innerHTML = '' };
-    summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
-
+  summaryData = [];
+  makeSummaryTableRowData();
+  const summaryTableEl = document.querySelector('.js-summary-table');
+  const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
+  if ([...summaryTableEl.children].length > 1) {
+    summaryTableEl.lastElementChild.remove();
+  }
+  summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
 }
-
-
