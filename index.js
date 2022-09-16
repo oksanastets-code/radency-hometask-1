@@ -5,7 +5,6 @@ const makeNotesTableRowMarkup = note => {
   dates = getDates(content);
   return `  
         <tr>
-         
           <td>${name}</td>
           <td>${created}</td>
           <td class="js-categories">${category}</td>
@@ -134,6 +133,7 @@ function getDates(str) {
 }
 
 // рендер підсумкової таблиці
+
 const tds = () => {
   const arrayOfTds = [...document.querySelectorAll('.js-categories')];
   return arrayOfTds;
@@ -168,11 +168,11 @@ function countNotesByCategoryAndStatus(callback, option) {
   });
   console.log(arrayByCategory);
   let activeArray = [];
-  let archievedArray = [];
+  let archivedArray = [];
 
   arrayByCategory.filter(item => {
     if (item.parentElement.hasAttribute('data-status')) {
-      archievedArray.push(item.parentElement);
+      archivedArray.push(item.parentElement);
     }
     if (!item.parentElement.hasAttribute('data-status')) {
       activeArray.push(item.parentElement);
@@ -182,10 +182,10 @@ function countNotesByCategoryAndStatus(callback, option) {
   const newSummaryRowData = {};
   newSummaryRowData.option = option;
   newSummaryRowData.active = activeArray.length;
-  newSummaryRowData.archieved = archievedArray.length;
-  console.log(newSummaryRowData);
+  newSummaryRowData.archieved = archivedArray.length;
+  //   console.log(newSummaryRowData);
   summaryData.push(newSummaryRowData);
-  console.log(summaryData);
+  //   console.log(summaryData);
   return summaryData;
 }
 
@@ -199,4 +199,65 @@ function renderSummaryTable() {
     summaryTableEl.lastElementChild.remove();
   }
   summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
+}
+renderSummaryTable();
+
+// рендер архіву
+const archiveLink = document.querySelector('.js-archive');
+console.log(archiveLink);
+archiveLink.addEventListener('click', onaAchiveLinkClick);
+function onaAchiveLinkClick(e) {
+  e.preventDefault();
+
+  const body = document.querySelector('body');
+  const archiveTableHeadingEl = `<table class="js-archive-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Content</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>`;
+    body.insertAdjacentHTML('beforeend', archiveTableHeadingEl);
+    renderArchiveTable();
+}
+const makeArchiveTableRowMarkup = data => {
+  let { name, category, content } = data;
+
+  return `  
+        <tr>
+          <td>${name}</td>
+          <td>${category}</td>
+          <td>${content}</td>
+          <td>
+            <button type="button" class="unarchieve__button">Unarchive</button>
+          </td>
+        </tr>
+  `;
+};
+let archiveData = [
+  {
+    name: 'cnkdnc',
+    category: 'Task',
+    content: ' vnfdk kdk klcd k',
+  },
+  {
+    name: 'cnkdnc',
+    category: 'Task',
+    content: ' vnfdk kdk klcd k',
+  },
+  {
+    name: 'cnkdnc',
+    category: 'Task',
+    content: ' vnfdk kdk klcd k',
+  },
+];
+function renderArchiveTable() {
+    const archiveTableEl = document.querySelector('.js-archive-table');
+    const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
+    archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
+
+
 }

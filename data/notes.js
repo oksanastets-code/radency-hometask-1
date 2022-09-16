@@ -6,7 +6,7 @@ export default [
         category: 'Task',
         content: 'Tomatoes, bread',
         dates: '',
-        active: true
+        
     },
     {
         id: 2,
@@ -15,7 +15,7 @@ export default [
         category: 'Random Thought',
         content: 'The evolution Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
         dates: '',
-        active: true
+        
     },
     {
         id: 3,
@@ -24,7 +24,7 @@ export default [
         category: 'Idea',
         content: 'Implement new feature esse to 7.7.2021 alias quaerat porro',
         dates: '',
-        active: true
+        
     },
     {
         id: 4,
@@ -33,7 +33,7 @@ export default [
         category: 'Quote',
         content: 'How real is any of the past, being every moment revalued to make the present possible',
         dates: '',
-        active: true
+        
     },
     {
         id: 5,
@@ -42,7 +42,7 @@ export default [
         category: 'Task',
         content: 'The Lean Startup',
         dates: '',
-        active: true
+        
     },
     {
         id: 6,
@@ -51,7 +51,7 @@ export default [
         category: 'Random Thought',
         content: 'Sweet Home on 2/6/2021',
         dates: '',
-        active: true
+        
     },
     {
         id: 7,
@@ -60,7 +60,7 @@ export default [
         category: 'Quote',
         content: 'Always forgive your enemies; nothing annoys them so much.',
         dates: '',
-        active: false
+        
     },
      {
         id: 8,
@@ -69,6 +69,6 @@ export default [
         category: 'Task',
         content: 'Visit my dentist',
         dates: '',
-        active: false
+        
     },
 ]
