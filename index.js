@@ -86,11 +86,12 @@ function onDel(event) {
         let parent = this.parentNode;
         parent.parentNode.remove();
       };
-    }
+      }
+      renderSummaryTable();
   }
 }
 // архівування запису
-let summaryData = [];
+
 tableEl.addEventListener('click', onArch);
 function onArch(event) {
   if (event.target.className === 'archieve__button') {
@@ -103,12 +104,7 @@ function onArch(event) {
         parent.parentNode.dataset.status = 'archieved';
       };
     }
-    summaryData = [];
-    makeSummaryTableRowData();
-    const summaryTableEl = document.querySelector('.js-summary-table');
-    const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
-    summaryTableEl.innerHTML = '';
-    summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
+      renderSummaryTable();
   }
 }
 
@@ -145,19 +141,12 @@ const makeSummaryTableRowMarkup = data => {
 
   return `  
         <tr>
-         
           <td>${option}</td>
           <td>${active}</td>
           <td>${archieved}</td>
-          
         </tr>
   `;
 };
-
-const summaryTableEl = document.querySelector('.js-summary-table');
-const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
-
-summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
 
 const optionsArray = [...document.getElementById('categories').children].map(
   option => option.value,
@@ -193,12 +182,19 @@ function countNotesByCategoryAndStatus(array, option) {
   newSummaryRowData.archieved = archievedArray.length;
   console.log(newSummaryRowData);
   summaryData.push(newSummaryRowData);
-
-  //   const newSummaryRow = makeSummaryTableRowMarkup(newSummaryRowData);
-  //   summaryTableEl.insertAdjacentHTML('beforeend', newSummaryRow);
-
-  //   console.log(string, archievedArray, activeArray);
   console.log(summaryData);
   return summaryData;
 }
-// makeSummaryTableRowData();
+
+let summaryData = [];
+function renderSummaryTable() {
+    summaryData = [];
+    makeSummaryTableRowData();
+    const summaryTableEl = document.querySelector('.js-summary-table');
+    const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
+    if ([...summaryTableEl.children].length > 1) { summaryTableEl.lastElementChild.innerHTML = '' };
+    summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
+
+}
+
+
