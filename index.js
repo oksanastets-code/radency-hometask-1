@@ -90,6 +90,7 @@ function onDel(event) {
   }
 }
 // архівування запису
+let summaryData = [];
 tableEl.addEventListener('click', onArch);
 function onArch(event) {
   if (event.target.className === 'archieve__button') {
@@ -102,8 +103,13 @@ function onArch(event) {
         parent.parentNode.dataset.status = 'archieved';
       };
     }
+    summaryData = [];
+    makeSummaryTableRowData();
+    const summaryTableEl = document.querySelector('.js-summary-table');
+    const summaryTableRowsMarkup = summaryData.map(makeSummaryTableRowMarkup).join('');
+    summaryTableEl.innerHTML = '';
+    summaryTableEl.insertAdjacentHTML('beforeend', summaryTableRowsMarkup);
   }
-  makeSummaryTableRowData();
 }
 
 // згенерувати дату
@@ -133,23 +139,7 @@ function getDates(str) {
 // рендер підсумкової таблиці
 
 const tds = [...document.querySelectorAll('.js-categories')];
-const summaryData = [
-  {
-    option: 'Task',
-    active: 3,
-    archieved: 5,
-  },
-  {
-    option: 'Random Thought',
-    active: 5,
-    archieved: 12,
-  },
-  {
-    option: 'Idea',
-    active: 6,
-    archieved: 0,
-  },
-];
+
 const makeSummaryTableRowMarkup = data => {
   let { option, active, archieved } = data;
 
@@ -180,19 +170,15 @@ function makeSummaryTableRowData() {
   });
 }
 
-function countNotesByCategoryAndStatus(array, string) {
+function countNotesByCategoryAndStatus(array, option) {
   const arrayByCategory = array.filter(td => {
-    return td.textContent === string;
+    return td.textContent === option;
   });
-  // console.log(string, arrayByCategory.length);
+
   let activeArray = [];
-    let archievedArray = [];
-    const summaryData = [];
-  const arrayByCategoryActive = arrayByCategory.filter(item => {
-    // const parentEl = item.parentElement;
-    // console.log(item.parentElement.hasAttribute('data-status'));
-    // console.log(item.parentElement);
-    // console.log(parentEl.hasAttribute('data-status'));
+  let archievedArray = [];
+
+  arrayByCategory.filter(item => {
     if (item.parentElement.hasAttribute('data-status')) {
       archievedArray.push(item.parentElement);
     }
@@ -200,20 +186,19 @@ function countNotesByCategoryAndStatus(array, string) {
       activeArray.push(item.parentElement);
     }
   });
-    
+
   const newSummaryRowData = {};
-  newSummaryRowData.option = string;
+  newSummaryRowData.option = option;
   newSummaryRowData.active = activeArray.length;
   newSummaryRowData.archieved = archievedArray.length;
-    console.log(newSummaryRowData);
-    summaryData.push(newSummaryRowData);
-    console.log(summaryData);
-    
-    //   const newSummaryRow = makeSummaryTableRowMarkup(newSummaryRowData);
-    //   summaryTableEl.insertAdjacentHTML('beforeend', newSummaryRow);
-    
-    //   console.log(string, archievedArray, activeArray);
-    return summaryData;
-}
+  console.log(newSummaryRowData);
+  summaryData.push(newSummaryRowData);
 
+  //   const newSummaryRow = makeSummaryTableRowMarkup(newSummaryRowData);
+  //   summaryTableEl.insertAdjacentHTML('beforeend', newSummaryRow);
+
+  //   console.log(string, archievedArray, activeArray);
+  console.log(summaryData);
+  return summaryData;
+}
 // makeSummaryTableRowData();
