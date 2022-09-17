@@ -4,11 +4,11 @@ const makeNotesTableRowMarkup = note => {
   let { name, created, category, content, dates } = note;
   dates = getDates(content);
   return `  
-        <tr>
-          <td>${name}</td>
+        <tr class="js-notes-row">
+          <td class="js-name">${name}</td>
           <td>${created}</td>
           <td class="js-categories">${category}</td>
-          <td>${content}</td>
+          <td class="js-content">${content}</td>
           <td>${dates}</td>
           <td>
             <button>Edit</button>
@@ -78,7 +78,7 @@ function renderNewNote(name, category, content) {
 
 tableEl.addEventListener('click', onDel);
 function onDel(event) {
-  console.log(event.target.className);
+  // console.log(event.target.className);
   if (event.target.className === 'delete__button') {
     const deleteNoteBtn = document.querySelectorAll('.delete__button');
     for (let i = 0; i < deleteNoteBtn.length; i++) {
@@ -105,6 +105,8 @@ function onArch(event) {
       };
     }
     renderSummaryTable();
+    // trs();
+    getArchiveTableData(trs);
   }
 }
 
@@ -166,7 +168,7 @@ function countNotesByCategoryAndStatus(callback, option) {
   const arrayByCategory = array.filter(td => {
     return td.textContent === option;
   });
-  console.log(arrayByCategory);
+  // console.log(arrayByCategory);
   let activeArray = [];
   let archivedArray = [];
 
@@ -185,7 +187,7 @@ function countNotesByCategoryAndStatus(callback, option) {
   newSummaryRowData.archieved = archivedArray.length;
   //   console.log(newSummaryRowData);
   summaryData.push(newSummaryRowData);
-  //   console.log(summaryData);
+  // console.log(summaryData);
   return summaryData;
 }
 
@@ -204,7 +206,7 @@ renderSummaryTable();
 
 // рендер архіву
 const archiveLink = document.querySelector('.js-archive');
-console.log(archiveLink);
+// console.log(archiveLink);
 archiveLink.addEventListener('click', onaAchiveLinkClick);
 function onaAchiveLinkClick(e) {
   e.preventDefault();
@@ -220,8 +222,8 @@ function onaAchiveLinkClick(e) {
         </tr>
       </thead>
     </table>`;
-    body.insertAdjacentHTML('beforeend', archiveTableHeadingEl);
-    renderArchiveTable();
+  body.insertAdjacentHTML('beforeend', archiveTableHeadingEl);
+  renderArchiveTable();
 }
 const makeArchiveTableRowMarkup = data => {
   let { name, category, content } = data;
@@ -238,26 +240,63 @@ const makeArchiveTableRowMarkup = data => {
   `;
 };
 let archiveData = [
-  {
-    name: 'cnkdnc',
-    category: 'Task',
-    content: ' vnfdk kdk klcd k',
-  },
-  {
-    name: 'cnkdnc',
-    category: 'Task',
-    content: ' vnfdk kdk klcd k',
-  },
-  {
-    name: 'cnkdnc',
-    category: 'Task',
-    content: ' vnfdk kdk klcd k',
-  },
+  // {
+  //   name: 'cnkdnc',
+  //   category: 'Task',
+  //   content: ' vnfdk kdk klcd k',
+  // },
+  // {
+  //   name: 'cnkdnc',
+  //   category: 'Task',
+  //   content: ' vnfdk kdk klcd k',
+  // },
+  // {
+  //   name: 'cnkdnc',
+  //   category: 'Task',
+  //   content: ' vnfdk kdk klcd k',
+  // },
 ];
 function renderArchiveTable() {
-    const archiveTableEl = document.querySelector('.js-archive-table');
-    const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
-    archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
-
-
+  const archiveTableEl = document.querySelector('.js-archive-table');
+  const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
+  archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
 }
+const trs = () => {
+  const arrayOfTrs = [...document.querySelectorAll('.js-notes-row')];
+  console.log(arrayOfTrs);
+  let archivedList = [];
+  arrayOfTrs.filter(item => {
+    if (item.hasAttribute('data-status')) {
+      archivedList.push(item);
+    }
+  });
+  console.log(archivedList);
+  return archivedList;
+};
+const archivedItemsData = {};
+
+
+function getArchiveTableData(foo) {
+  const archivedArray = foo();
+
+  console.log(archivedArray);
+  archivedArray.filter(item => {
+    // getTextContent(item, '.js-name', note, archivedItemsData);
+    // getTextContent(item, '.js-category', category, archivedItemsData);
+    // getTextContent(item, '.js-content', content, archivedItemsData);
+
+    let elName = item.querySelector('.js-name');
+    console.log(elName);
+    archivedItemsData.name = elName.textContent;
+    let elCateg = item.querySelector('.js-categories');
+    archivedItemsData.category = elCateg.textContent;
+    let elContent = item.querySelector('.js-content');
+    archivedItemsData.content = elContent.textContent;
+    console.log(archivedItemsData);
+    archiveData.push(archivedItemsData);
+    console.log(archiveData);
+  });
+
+  return 0;
+}
+// getArchiveTableData(trs);
