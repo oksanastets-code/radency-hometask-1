@@ -42,7 +42,7 @@ closeFormBtn.addEventListener('click', onCloseForm);
 function onCloseForm() {
   lightbox.classList.remove('is-open');
   addNoteForm.classList.add('visually-hidden');
-archiveTableEl.classList.add('visually-hidden');
+  archiveTableEl.classList.add('visually-hidden');
 }
 
 // додавання нового запису
@@ -82,7 +82,6 @@ function renderNewNote(name, category, content) {
 
 tableEl.addEventListener('click', onDel);
 function onDel(event) {
-  // console.log(event.target.className);
   if (event.target.className === 'delete__button') {
     const deleteNoteBtn = document.querySelectorAll('.delete__button');
     for (let i = 0; i < deleteNoteBtn.length; i++) {
@@ -103,13 +102,11 @@ function onArch(event) {
     for (let i = 0; i < archiveNoteBtn.length; i++) {
       archiveNoteBtn[i].onclick = function () {
         let parent = this.parentNode;
-        //   parent.parentNode.classList.add('visually-hidden');
         parent.parentNode.style.display = 'none';
         parent.parentNode.dataset.status = 'archieved';
       };
     }
     renderSummaryTable();
-    // trs();
     getArchiveTableData(trs);
   }
 }
@@ -172,7 +169,6 @@ function countNotesByCategoryAndStatus(callback, option) {
   const arrayByCategory = array.filter(td => {
     return td.textContent === option;
   });
-  // console.log(arrayByCategory);
   let activeArray = [];
   let archivedArray = [];
 
@@ -189,9 +185,7 @@ function countNotesByCategoryAndStatus(callback, option) {
   newSummaryRowData.option = option;
   newSummaryRowData.active = activeArray.length;
   newSummaryRowData.archieved = archivedArray.length;
-  //   console.log(newSummaryRowData);
   summaryData.push(newSummaryRowData);
-  // console.log(summaryData);
   return summaryData;
 }
 
@@ -210,17 +204,16 @@ renderSummaryTable();
 
 // рендер архіву
 const archiveLink = document.querySelector('.js-archive');
-// console.log(archiveLink);
 archiveLink.addEventListener('click', onaAchiveLinkClick);
+
 function onaAchiveLinkClick(e) {
   e.preventDefault();
-lightbox.classList.add('is-open');
-archiveTableEl.classList.remove('visually-hidden');
+  lightbox.classList.add('is-open');
+  archiveTableEl.classList.remove('visually-hidden');
   renderArchiveTable();
 }
 const makeArchiveTableRowMarkup = data => {
   let { name, category, content } = data;
-
   return `  
         <tr>
           <td>${name}</td>
@@ -234,6 +227,7 @@ const makeArchiveTableRowMarkup = data => {
 };
 let archiveData = [];
 const archiveTableEl = document.querySelector('.js-archive-table');
+
 function renderArchiveTable() {
   if ([...archiveTableEl.children].length > 1) {
     archiveTableEl.lastElementChild.remove();
@@ -241,6 +235,7 @@ function renderArchiveTable() {
   const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
   archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
 }
+
 const trs = () => {
   const arrayOfTrs = [...document.querySelectorAll('.js-notes-row')];
   console.log(arrayOfTrs);
@@ -253,7 +248,6 @@ const trs = () => {
   console.log(archivedList);
   return archivedList;
 };
-// const archivedItemsData = [];
 
 function getArchiveTableData(foo) {
   const archivedArray = foo();
@@ -272,4 +266,4 @@ function getArchiveTableData(foo) {
   console.log(archiveData);
   return archiveData;
 }
-// getArchiveTableData(trs);
+
