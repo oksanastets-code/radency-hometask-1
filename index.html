@@ -36,7 +36,8 @@
       <div class="lightbox__overlay"></div>
 
       <div class="lightbox__content">
-        <form action="" class="note-form" autocomplete="off">
+        <!-- форма -->
+        <form action="" class="note-form visually-hidden" autocomplete="off">
           <label
             >Name
             <input type="text" placeholder="Name" name="name" />
@@ -58,6 +59,17 @@
 
           <button type="submit" class="" data-action="add-note">Додати</button>
         </form>
+        <!-- таблиця архіву -->
+        <table class="js-archive-table visually-hidden">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Content</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
       </div>
 
       <button type="button" class="lightbox__button" data-action="close-form">.</button>

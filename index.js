@@ -26,11 +26,14 @@ tableEl.insertAdjacentHTML('beforeend', notesTableRowsMarkup);
 
 // відкриття і закриття форми
 const lightbox = document.querySelector('.js-lightbox');
+const addNoteForm = document.querySelector('.note-form');
 const openFormBtn = document.querySelector('[data-action="open-form"]');
+
 openFormBtn.addEventListener('click', onOpenForm);
 
 function onOpenForm() {
   lightbox.classList.add('is-open');
+  addNoteForm.classList.remove('visually-hidden');
 }
 
 const closeFormBtn = document.querySelector('[data-action="close-form"]');
@@ -38,10 +41,11 @@ closeFormBtn.addEventListener('click', onCloseForm);
 
 function onCloseForm() {
   lightbox.classList.remove('is-open');
+  addNoteForm.classList.add('visually-hidden');
+archiveTableEl.classList.add('visually-hidden');
 }
 
 // додавання нового запису
-const addNoteForm = document.querySelector('.note-form');
 addNoteForm.addEventListener('submit', onSubmit);
 
 function onSubmit(event) {
@@ -210,19 +214,8 @@ const archiveLink = document.querySelector('.js-archive');
 archiveLink.addEventListener('click', onaAchiveLinkClick);
 function onaAchiveLinkClick(e) {
   e.preventDefault();
-
-  const body = document.querySelector('body');
-  const archiveTableHeadingEl = `<table class="js-archive-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Content</th>
-          <th></th>
-        </tr>
-      </thead>
-    </table>`;
-  body.insertAdjacentHTML('beforeend', archiveTableHeadingEl);
+lightbox.classList.add('is-open');
+archiveTableEl.classList.remove('visually-hidden');
   renderArchiveTable();
 }
 const makeArchiveTableRowMarkup = data => {
@@ -239,25 +232,12 @@ const makeArchiveTableRowMarkup = data => {
         </tr>
   `;
 };
-let archiveData = [
-  // {
-  //   name: 'cnkdnc',
-  //   category: 'Task',
-  //   content: ' vnfdk kdk klcd k',
-  // },
-  // {
-  //   name: 'cnkdnc',
-  //   category: 'Task',
-  //   content: ' vnfdk kdk klcd k',
-  // },
-  // {
-  //   name: 'cnkdnc',
-  //   category: 'Task',
-  //   content: ' vnfdk kdk klcd k',
-  // },
-];
+let archiveData = [];
+const archiveTableEl = document.querySelector('.js-archive-table');
 function renderArchiveTable() {
-  const archiveTableEl = document.querySelector('.js-archive-table');
+  if ([...archiveTableEl.children].length > 1) {
+    archiveTableEl.lastElementChild.remove();
+  }
   const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
   archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
 }
@@ -273,30 +253,23 @@ const trs = () => {
   console.log(archivedList);
   return archivedList;
 };
-const archivedItemsData = {};
-
+// const archivedItemsData = [];
 
 function getArchiveTableData(foo) {
   const archivedArray = foo();
-
   console.log(archivedArray);
-  archivedArray.filter(item => {
-    // getTextContent(item, '.js-name', note, archivedItemsData);
-    // getTextContent(item, '.js-category', category, archivedItemsData);
-    // getTextContent(item, '.js-content', content, archivedItemsData);
-
+  archiveData = [];
+  archivedArray.map(item => {
     let elName = item.querySelector('.js-name');
-    console.log(elName);
-    archivedItemsData.name = elName.textContent;
     let elCateg = item.querySelector('.js-categories');
-    archivedItemsData.category = elCateg.textContent;
     let elContent = item.querySelector('.js-content');
-    archivedItemsData.content = elContent.textContent;
-    console.log(archivedItemsData);
-    archiveData.push(archivedItemsData);
-    console.log(archiveData);
+    const newArchiveRow = {};
+    newArchiveRow.name = elName.textContent;
+    newArchiveRow.category = elCateg.textContent;
+    newArchiveRow.content = elContent.textContent;
+    archiveData.push(newArchiveRow);
   });
-
-  return 0;
+  console.log(archiveData);
+  return archiveData;
 }
 // getArchiveTableData(trs);
