@@ -231,8 +231,10 @@ let archiveData = [];
 const archiveTableEl = document.querySelector('.js-archive-table');
 
 function renderArchiveTable() {
+  console.log([...archiveTableEl.children]);
   if ([...archiveTableEl.children].length > 1) {
-    archiveTableEl.lastElementChild.remove();
+    // archiveTableEl.lastElementChild.remove();
+
   }
   const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
   archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
@@ -267,11 +269,13 @@ function getArchiveTableData(foo) {
   // console.log(archiveData);
   return archiveData;
 }
+
 // розархівування запису
+let unarchiveBtn = [];
 function getUnarchiveBtns() {
-  const unarchiveBtn = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
-  console.log(unarchiveBtn);
   
+  unarchiveBtn = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
+  console.log(unarchiveBtn);
   unarchiveBtn.forEach(btn => {
     btn.addEventListener('click', event => {
       console.log(event.target);
@@ -280,10 +284,10 @@ function getUnarchiveBtns() {
       console.log(identity);
       parent.parentNode.remove();
 
-      // const index = unarchiveBtn.indexOf(btn);
-      // console.log(index);
-      // archiveData.splice(index, 1);
-      // console.log(archiveData);
+      const index = unarchiveBtn.indexOf(btn);
+      console.log(index);
+      archiveData.splice(index, 1);
+      console.log(archiveData);
       const arrayOfNamesTds = document.querySelectorAll('.js-name');
       const unarchivedNote = arrayOfNamesTds.forEach(td => {
         if (td.textContent === identity) {
