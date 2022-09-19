@@ -233,7 +233,7 @@ const archiveTableEl = document.querySelector('.js-archive-table');
 function renderArchiveTable() {
   console.log([...archiveTableEl.children]);
   if ([...archiveTableEl.children].length > 1) {
-    // archiveTableEl.lastElementChild.remove();
+    archiveTableEl.lastElementChild.remove();
 
   }
   const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
@@ -294,7 +294,8 @@ function getUnarchiveBtns() {
           delete td.parentElement.dataset.status;
           td.parentElement.style.display = '';
           renderSummaryTable();
-          
+          renderArchiveTable();
+          getUnarchiveBtns();
         }
       });
       
