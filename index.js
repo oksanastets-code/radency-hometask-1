@@ -11,7 +11,7 @@ const makeNotesTableRowMarkup = note => {
           <td class="js-content">${content}</td>
           <td>${dates}</td>
           <td>
-            <button>Edit</button>
+            <button type="button" class="edit__button">Edit</button>
             <button type="button" class="archieve__button">Archive</button>
             <button type="button" class="delete__button">Delete</button>
           </td>
@@ -61,6 +61,7 @@ function onSubmit(event) {
   addNoteForm.reset();
   onCloseForm();
   renderSummaryTable();
+  
 }
 
 const tbodyEl = document.querySelector('tbody');
@@ -77,21 +78,36 @@ function renderNewNote(name, category, content) {
   const newNoteRow = makeNotesTableRowMarkup(newNote);
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
 }
+// редагування запису
+// addNoteForm.addEventListener('submit', onEdit);
+// let editNoteBtn = document.querySelectorAll('.edit__button');
+// console.log(editNoteBtn);  
+// editNoteBtn.forEach(btn => {
+//     btn.addEventListener('click', event => {
+//       const parent = btn.parentNode.parentNode;
+//       lightbox.classList.add('is-open');
+//       addNoteForm.classList.remove('visually-hidden');
+//       console.log(parent);
+//     });
+//   });
 
 // видалення запису
 
 let deleteNoteBtn = document.querySelectorAll('.delete__button');
+console.log(deleteNoteBtn);  
 deleteNoteBtn.forEach(btn => {
-  btn.addEventListener('click', event => {
-    const parent = btn.parentNode.parentNode;
-    parent.remove();
-    renderSummaryTable();
+    btn.addEventListener('click', event => {
+      const parent = btn.parentNode.parentNode;
+      parent.remove();
+      renderSummaryTable();
+    });
   });
-});
+
 
 // архівування запису
 
 let archiveNoteBtn = document.querySelectorAll('.archieve__button');
+console.log(archiveNoteBtn);
 archiveNoteBtn.forEach(btn => {
   btn.addEventListener('click', event => {
     const parent = btn.parentNode.parentNode;
@@ -129,8 +145,7 @@ function getDates(str) {
 // рендер підсумкової таблиці
 
 const tds = () => {
-  const arrayOfTds = [...document.querySelectorAll('.js-categories')];
-  return arrayOfTds;
+  return [...document.querySelectorAll('.js-categories')];
 };
 
 const makeSummaryTableRowMarkup = data => {
