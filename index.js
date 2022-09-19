@@ -80,37 +80,27 @@ function renderNewNote(name, category, content) {
 
 // видалення запису
 
-tableEl.addEventListener('click', onDel);
-function onDel(event) {
-  if (event.target.className === 'delete__button') {
-    const deleteNoteBtn = document.querySelectorAll('.delete__button');
-    console.log([...deleteNoteBtn]);
-    for (let i = 0; i < deleteNoteBtn.length; i++) {
-      deleteNoteBtn[i].onclick = function () {
-        let parent = this.parentNode;
-        parent.parentNode.remove();
-      };
-    }
+let deleteNoteBtn = document.querySelectorAll('.delete__button');
+deleteNoteBtn.forEach(btn => {
+  btn.addEventListener('click', event => {
+    const parent = btn.parentNode.parentNode;
+    parent.remove();
     renderSummaryTable();
-  }
-}
+  });
+});
+
 // архівування запису
 
-tableEl.addEventListener('click', onArch);
-function onArch(event) {
-  if (event.target.className === 'archieve__button') {
-    const archiveNoteBtn = document.querySelectorAll('.archieve__button');
-    for (let i = 0; i < archiveNoteBtn.length; i++) {
-      archiveNoteBtn[i].onclick = function () {
-        let parent = this.parentNode;
-        parent.parentNode.style.display = 'none';
-        parent.parentNode.dataset.status = 'archieved';
-      };
-    }
+let archiveNoteBtn = document.querySelectorAll('.archieve__button');
+archiveNoteBtn.forEach(btn => {
+  btn.addEventListener('click', event => {
+    const parent = btn.parentNode.parentNode;
+    parent.style.display = 'none';
+    parent.dataset.status = 'archieved';
     renderSummaryTable();
     getArchiveTableData(trs);
-  }
-}
+  });
+});
 
 // згенерувати дату
 function getCurrentDate() {
@@ -145,7 +135,6 @@ const tds = () => {
 
 const makeSummaryTableRowMarkup = data => {
   let { option, active, archieved } = data;
-
   return `  
         <tr>
           <td>${option}</td>
@@ -231,10 +220,8 @@ let archiveData = [];
 const archiveTableEl = document.querySelector('.js-archive-table');
 
 function renderArchiveTable() {
-  console.log([...archiveTableEl.children]);
   if ([...archiveTableEl.children].length > 1) {
     archiveTableEl.lastElementChild.remove();
-
   }
   const archiveTableRowsMarkup = archiveData.map(makeArchiveTableRowMarkup).join('');
   archiveTableEl.insertAdjacentHTML('beforeend', archiveTableRowsMarkup);
@@ -242,14 +229,12 @@ function renderArchiveTable() {
 
 const trs = () => {
   const arrayOfTrs = [...document.querySelectorAll('.js-notes-row')];
-  // console.log(arrayOfTrs);
   let archivedList = [];
   arrayOfTrs.filter(item => {
     if (item.hasAttribute('data-status')) {
       archivedList.push(item);
     }
   });
-  // console.log(archivedList);
   return archivedList;
 };
 
@@ -266,30 +251,21 @@ function getArchiveTableData(foo) {
     newArchiveRow.content = elContent.textContent;
     archiveData.push(newArchiveRow);
   });
-  // console.log(archiveData);
   return archiveData;
 }
 
 // розархівування запису
 let unarchiveBtn = [];
 function getUnarchiveBtns() {
-  
   unarchiveBtn = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
-  console.log(unarchiveBtn);
   unarchiveBtn.forEach(btn => {
     btn.addEventListener('click', event => {
-      console.log(event.target);
       const parent = btn.parentNode.parentNode;
-      const identity = parent.firstElementChild.textContent
-      console.log(identity);
-      parent.parentNode.remove();
-
+      const identity = parent.firstElementChild.textContent;
       const index = unarchiveBtn.indexOf(btn);
-      console.log(index);
       archiveData.splice(index, 1);
-      console.log(archiveData);
       const arrayOfNamesTds = document.querySelectorAll('.js-name');
-      const unarchivedNote = arrayOfNamesTds.forEach(td => {
+      arrayOfNamesTds.forEach(td => {
         if (td.textContent === identity) {
           delete td.parentElement.dataset.status;
           td.parentElement.style.display = '';
@@ -298,7 +274,6 @@ function getUnarchiveBtns() {
           getUnarchiveBtns();
         }
       });
-      
-    })
-  })
-};
+    });
+  });
+}
