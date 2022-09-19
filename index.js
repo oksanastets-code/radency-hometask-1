@@ -63,6 +63,7 @@ function onSubmit(event) {
   renderSummaryTable();
 }
 
+const tbodyEl = document.querySelector('tbody');
 function renderNewNote(name, category, content) {
   const newNote = {
     name,
@@ -74,7 +75,6 @@ function renderNewNote(name, category, content) {
   console.log(newNote);
 
   const newNoteRow = makeNotesTableRowMarkup(newNote);
-  const tbodyEl = document.querySelector('tbody');
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
 }
 
@@ -84,6 +84,7 @@ tableEl.addEventListener('click', onDel);
 function onDel(event) {
   if (event.target.className === 'delete__button') {
     const deleteNoteBtn = document.querySelectorAll('.delete__button');
+    console.log([...deleteNoteBtn]);
     for (let i = 0; i < deleteNoteBtn.length; i++) {
       deleteNoteBtn[i].onclick = function () {
         let parent = this.parentNode;
@@ -211,6 +212,7 @@ function onaAchiveLinkClick(e) {
   lightbox.classList.add('is-open');
   archiveTableEl.classList.remove('visually-hidden');
   renderArchiveTable();
+  getUnarchiveBtns();
 }
 const makeArchiveTableRowMarkup = data => {
   let { name, category, content } = data;
@@ -238,20 +240,19 @@ function renderArchiveTable() {
 
 const trs = () => {
   const arrayOfTrs = [...document.querySelectorAll('.js-notes-row')];
-  console.log(arrayOfTrs);
+  // console.log(arrayOfTrs);
   let archivedList = [];
   arrayOfTrs.filter(item => {
     if (item.hasAttribute('data-status')) {
       archivedList.push(item);
     }
   });
-  console.log(archivedList);
+  // console.log(archivedList);
   return archivedList;
 };
 
 function getArchiveTableData(foo) {
   const archivedArray = foo();
-  console.log(archivedArray);
   archiveData = [];
   archivedArray.map(item => {
     let elName = item.querySelector('.js-name');
@@ -263,7 +264,36 @@ function getArchiveTableData(foo) {
     newArchiveRow.content = elContent.textContent;
     archiveData.push(newArchiveRow);
   });
-  console.log(archiveData);
+  // console.log(archiveData);
   return archiveData;
 }
+// розархівування запису
+function getUnarchiveBtns() {
+  const unarchiveBtn = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
+  console.log(unarchiveBtn);
+  
+  unarchiveBtn.forEach(btn => {
+    btn.addEventListener('click', event => {
+      console.log(event.target);
+      const parent = btn.parentNode.parentNode;
+      const identity = parent.firstElementChild.textContent
+      console.log(identity);
+      parent.parentNode.remove();
 
+      // const index = unarchiveBtn.indexOf(btn);
+      // console.log(index);
+      // archiveData.splice(index, 1);
+      // console.log(archiveData);
+      const arrayOfNamesTds = document.querySelectorAll('.js-name');
+      const unarchivedNote = arrayOfNamesTds.forEach(td => {
+        if (td.textContent === identity) {
+          delete td.parentElement.dataset.status;
+          td.parentElement.style.display = '';
+          renderSummaryTable();
+          
+        }
+      });
+      
+    })
+  })
+};
