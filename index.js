@@ -61,7 +61,8 @@ function onSubmit(event) {
   addNoteForm.reset();
   onCloseForm();
   renderSummaryTable();
-  
+  deleteNote(getBtns);
+  archiveNote(getBtns);
 }
 
 const tbodyEl = document.querySelector('tbody');
@@ -92,31 +93,37 @@ function renderNewNote(name, category, content) {
 //   });
 
 // видалення запису
+const getBtns = (str) => {
+  console.log(document.querySelectorAll(str));
+  return document.querySelectorAll(str);
+}
 
-let deleteNoteBtn = document.querySelectorAll('.delete__button');
-console.log(deleteNoteBtn);  
-deleteNoteBtn.forEach(btn => {
+function deleteNote(callback) {
+  const list = callback('.delete__button');
+  list.forEach(btn => {
     btn.addEventListener('click', event => {
       const parent = btn.parentNode.parentNode;
       parent.remove();
       renderSummaryTable();
     });
   });
-
+};
+deleteNote(getBtns);
 
 // архівування запису
-
-let archiveNoteBtn = document.querySelectorAll('.archieve__button');
-console.log(archiveNoteBtn);
-archiveNoteBtn.forEach(btn => {
-  btn.addEventListener('click', event => {
-    const parent = btn.parentNode.parentNode;
-    parent.style.display = 'none';
-    parent.dataset.status = 'archieved';
-    renderSummaryTable();
-    getArchiveTableData(trs);
+function archiveNote(callback) {
+  const list = callback('.archieve__button');
+  list.forEach(btn => {
+    btn.addEventListener('click', event => {
+      const parent = btn.parentNode.parentNode;
+      parent.style.display = 'none';
+      parent.dataset.status = 'archieved';
+      renderSummaryTable();
+      getArchiveTableData(trs);
+    });
   });
-});
+};
+archiveNote(getBtns);
 
 // згенерувати дату
 function getCurrentDate() {
