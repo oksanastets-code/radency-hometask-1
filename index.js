@@ -6,7 +6,7 @@ const makeNotesTableRowMarkup = note => {
   return `  
         <tr class="js-notes-row">
           <td class="js-name">${name}</td>
-          <td>${created}</td>
+          <td class="js-created">${created}</td>
           <td class="js-categories">${category}</td>
           <td class="js-content">${content}</td>
           <td>${dates}</td>
@@ -28,12 +28,15 @@ tableEl.insertAdjacentHTML('beforeend', notesTableRowsMarkup);
 const lightbox = document.querySelector('.js-lightbox');
 const addNoteForm = document.querySelector('.note-form');
 const openFormBtn = document.querySelector('[data-action="open-form"]');
-
+const saveBtn = document.querySelector('[data-action="edit-note"]');
+const addBtn = document.querySelector('[data-action="add-note"]');
+console.log(saveBtn);
 openFormBtn.addEventListener('click', onOpenForm);
 
 function onOpenForm() {
   lightbox.classList.add('is-open');
   addNoteForm.classList.remove('visually-hidden');
+  saveBtn.style.display = 'none';
 }
 
 const closeFormBtn = document.querySelector('[data-action="close-form"]');
@@ -43,6 +46,8 @@ function onCloseForm() {
   lightbox.classList.remove('is-open');
   addNoteForm.classList.add('visually-hidden');
   archiveTableEl.classList.add('visually-hidden');
+  addBtn.style.display = '';
+  saveBtn.style.display = '';
 }
 
 // додавання нового запису
@@ -56,23 +61,30 @@ function onSubmit(event) {
   const category = formElements.categ.value;
   const content = formElements.content.value;
 
-  renderNewNote(name, category, content);
+  const created = '';
+  renderNewNote(name, created, category, content);
 
   addNoteForm.reset();
   onCloseForm();
   renderSummaryTable();
   deleteNote(getBtns);
   archiveNote(getBtns);
+  editNote(getBtns);
 }
 
 const tbodyEl = document.querySelector('tbody');
-function renderNewNote(name, category, content) {
+function renderNewNote(name, created, category, content) {
   const newNote = {
     name,
+    created,
     category,
     content,
   };
-  newNote.created = getCurrentDate();
+  if (newNote.created === '') {
+    console.log('empty');
+    newNote.created = getCurrentDate();
+  }
+  // newNote.created = getCurrentDate();
   newNote.dates = getDates(content);
   console.log(newNote);
 
@@ -80,23 +92,63 @@ function renderNewNote(name, category, content) {
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
 }
 // редагування запису
-// addNoteForm.addEventListener('submit', onEdit);
-// let editNoteBtn = document.querySelectorAll('.edit__button');
-// console.log(editNoteBtn);  
-// editNoteBtn.forEach(btn => {
-//     btn.addEventListener('click', event => {
-//       const parent = btn.parentNode.parentNode;
-//       lightbox.classList.add('is-open');
-//       addNoteForm.classList.remove('visually-hidden');
-//       console.log(parent);
-//     });
-//   });
+
+const getBtns = str => {
+  // console.log(document.querySelectorAll(str));
+  return document.querySelectorAll(str);
+};
+function editNote(callback) {
+  const list = callback('.edit__button');
+  list.forEach(btn => {
+    let editTarget = [];
+    const editNoteData = {};
+    btn.addEventListener('click', event => {
+      editTarget = [...btn.parentNode.parentNode.children];
+      lightbox.classList.add('is-open');
+      addNoteForm.classList.remove('visually-hidden');
+      addBtn.style.display = 'none';
+      console.log(addBtn);
+
+      editTarget.map(item => {
+        if (item.className === 'js-name') {
+          editNoteData.name = item.textContent;
+        }
+        if (item.className === 'js-created') {
+          editNoteData.created = item.textContent;
+        }
+         if (item.className === 'js-categories') {
+          editNoteData.category = item.textContent;
+        }
+        if (item.className === 'js-content') {
+          editNoteData.content = item.textContent;
+        }
+      });
+      console.log('editNoteData', editNoteData);
+
+      const inputs = callback('input');
+      inputs.forEach(input => {
+        if (input.name === 'name') {
+          input.value = editNoteData.name;
+          console.log(input.value);
+        }
+         if (input.name === 'categ') {
+          input.value = editNoteData.category;
+          console.log(input.value);
+        }
+        if (input.name === 'content') {
+          input.value = editNoteData.content;
+          console.log(input.value);
+        }
+      });
+      console.log(editTarget);
+      return editTarget;
+    });
+    // editTarget.remove();
+  });
+}
+editNote(getBtns);
 
 // видалення запису
-const getBtns = (str) => {
-  console.log(document.querySelectorAll(str));
-  return document.querySelectorAll(str);
-}
 
 function deleteNote(callback) {
   const list = callback('.delete__button');
@@ -107,7 +159,7 @@ function deleteNote(callback) {
       renderSummaryTable();
     });
   });
-};
+}
 deleteNote(getBtns);
 
 // архівування запису
@@ -122,7 +174,7 @@ function archiveNote(callback) {
       getArchiveTableData(trs);
     });
   });
-};
+}
 archiveNote(getBtns);
 
 // згенерувати дату

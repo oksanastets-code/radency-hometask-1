@@ -26,7 +26,7 @@
         <tr>
           <th>Note Category</th>
           <th>Active</th>
-          <th><a href ="" class="js-archive">Archived</a></th>
+          <th><a href="" class="js-archive">Archived</a></th>
         </tr>
       </thead>
     </table>
@@ -57,19 +57,20 @@
             <input type="text" placeholder="Content" name="content" />
           </label>
 
-          <button type="submit" class="" data-action="add-note">Додати</button>
+          <button type="submit" data-action="add-note">Add</button>
+          <button type="submit" data-action="edit-note">Save</button>
         </form>
         <!-- таблиця архіву -->
         <table class="js-archive-table visually-hidden">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Content</th>
-          <th></th>
-        </tr>
-      </thead>
-    </table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Content</th>
+              <th></th>
+            </tr>
+          </thead>
+        </table>
       </div>
 
       <button type="button" class="lightbox__button" data-action="close-form">.</button>
