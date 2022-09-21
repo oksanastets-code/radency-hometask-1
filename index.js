@@ -30,7 +30,6 @@ const addNoteForm = document.querySelector('.note-form');
 const openFormBtn = document.querySelector('[data-action="open-form"]');
 const saveBtn = document.querySelector('[data-action="edit-note"]');
 const addBtn = document.querySelector('[data-action="add-note"]');
-console.log(saveBtn);
 openFormBtn.addEventListener('click', onOpenForm);
 
 function onOpenForm() {
@@ -107,7 +106,6 @@ function editNote(callback) {
       lightbox.classList.add('is-open');
       addNoteForm.classList.remove('visually-hidden');
       addBtn.style.display = 'none';
-      console.log(addBtn);
 
       editTarget.map(item => {
         if (item.className === 'js-name') {
@@ -116,7 +114,7 @@ function editNote(callback) {
         if (item.className === 'js-created') {
           editNoteData.created = item.textContent;
         }
-         if (item.className === 'js-categories') {
+        if (item.className === 'js-categories') {
           editNoteData.category = item.textContent;
         }
         if (item.className === 'js-content') {
@@ -125,23 +123,26 @@ function editNote(callback) {
       });
       console.log('editNoteData', editNoteData);
 
+      // заповнення форми даними для редагування
       const inputs = callback('input');
       inputs.forEach(input => {
         if (input.name === 'name') {
           input.value = editNoteData.name;
-          console.log(input.value);
+          // console.log(input.value);
         }
-         if (input.name === 'categ') {
+        if (input.name === 'categ') {
           input.value = editNoteData.category;
-          console.log(input.value);
+          // console.log(input.value);
         }
         if (input.name === 'content') {
           input.value = editNoteData.content;
-          console.log(input.value);
+          // console.log(input.value);
         }
       });
+
+      console.log('new editNoteData', editNoteData);
       console.log(editTarget);
-      return editTarget;
+      return editNoteData;
     });
     // editTarget.remove();
   });
