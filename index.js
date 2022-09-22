@@ -72,6 +72,7 @@ function onSubmit(event) {
 }
 
 const tbodyEl = document.querySelector('tbody');
+let editTarget = [];
 function renderNewNote(name, created, category, content) {
   const newNote = {
     name,
@@ -79,11 +80,16 @@ function renderNewNote(name, created, category, content) {
     category,
     content,
   };
-  if (newNote.created === '') {
-    console.log('empty');
+  if (!editTarget.length) {
     newNote.created = getCurrentDate();
+  } else {
+    editTarget.filter(item => {
+      if (item.className === 'js-created') {
+        newNote.created = item.textContent;
+      }
+    });
   }
-  // newNote.created = getCurrentDate();
+
   newNote.dates = getDates(content);
   console.log(newNote);
 
@@ -96,10 +102,10 @@ const getBtns = str => {
   // console.log(document.querySelectorAll(str));
   return document.querySelectorAll(str);
 };
+// let editTarget = [];
 function editNote(callback) {
   const list = callback('.edit__button');
   list.forEach(btn => {
-    let editTarget = [];
     const editNoteData = {};
     btn.addEventListener('click', event => {
       editTarget = [...btn.parentNode.parentNode.children];
@@ -142,9 +148,8 @@ function editNote(callback) {
 
       console.log('new editNoteData', editNoteData);
       console.log(editTarget);
-      return editNoteData;
+      return editNoteData, editTarget;
     });
-    // editTarget.remove();
   });
 }
 editNote(getBtns);
