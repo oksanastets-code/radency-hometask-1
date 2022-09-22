@@ -95,30 +95,31 @@ function renderNewNote(name, created, category, content) {
 
   const newNoteRow = makeNotesTableRowMarkup(newNote);
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
+  if (!editTarget.length) {
+  } else {
+  }
 }
 // редагування запису
 
 const getBtns = str => {
-  // console.log(document.querySelectorAll(str));
   return document.querySelectorAll(str);
 };
-// let editTarget = [];
 function editNote(callback) {
   const list = callback('.edit__button');
   list.forEach(btn => {
     const editNoteData = {};
     btn.addEventListener('click', event => {
+      const parent = btn.parentNode.parentNode;
+
       editTarget = [...btn.parentNode.parentNode.children];
       lightbox.classList.add('is-open');
       addNoteForm.classList.remove('visually-hidden');
       addBtn.style.display = 'none';
 
+      // берем дані цільової записки
       editTarget.map(item => {
         if (item.className === 'js-name') {
           editNoteData.name = item.textContent;
-        }
-        if (item.className === 'js-created') {
-          editNoteData.created = item.textContent;
         }
         if (item.className === 'js-categories') {
           editNoteData.category = item.textContent;
@@ -127,29 +128,28 @@ function editNote(callback) {
           editNoteData.content = item.textContent;
         }
       });
-      console.log('editNoteData', editNoteData);
 
       // заповнення форми даними для редагування
       const inputs = callback('input');
       inputs.forEach(input => {
         if (input.name === 'name') {
           input.value = editNoteData.name;
-          // console.log(input.value);
         }
         if (input.name === 'categ') {
           input.value = editNoteData.category;
-          // console.log(input.value);
         }
         if (input.name === 'content') {
           input.value = editNoteData.content;
-          // console.log(input.value);
         }
       });
 
-      console.log('new editNoteData', editNoteData);
-      console.log(editTarget);
+      // console.log('new editNoteData', editNoteData);
+      // console.log(editTarget);
+parent.remove();
+      renderSummaryTable();
       return editNoteData, editTarget;
     });
+
   });
 }
 editNote(getBtns);
