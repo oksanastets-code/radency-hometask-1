@@ -73,6 +73,7 @@ function onSubmit(event) {
 
 const tbodyEl = document.querySelector('tbody');
 let editTarget = [];
+let index = -1;
 function renderNewNote(name, created, category, content) {
   const newNote = {
     name,
@@ -99,11 +100,7 @@ function renderNewNote(name, created, category, content) {
 
   if (editTarget.length) {
     const array = [...tbodyEl.children];
-    array.filter(item => {
-      if (item.hasAttribute('data-edit')) {
-        item.remove();
-      }
-    });
+    array[index].remove();
   }
 }
 // редагування запису
@@ -117,14 +114,14 @@ function editNote(callback) {
     const editNoteData = {};
     btn.addEventListener('click', event => {
       const parent = btn.parentNode.parentNode;
-      console.log(parent);
-
       editTarget = [...btn.parentNode.parentNode.children];
-      console.log(editTarget);
       lightbox.classList.add('is-open');
       addNoteForm.classList.remove('visually-hidden');
       addBtn.style.display = 'none';
 
+      // берем індекс цільової записки
+      index = [...tbodyEl.children].indexOf(parent);
+      
       // берем дані цільової записки
       editTarget.map(item => {
         if (item.className === 'js-name') {
@@ -155,11 +152,9 @@ function editNote(callback) {
       // console.log('new editNoteData', editNoteData);
       // console.log(editTarget);
 
-      // мітим рядок
-      parent.dataset.edit = true;
       renderSummaryTable();
 
-      return editTarget;
+      return editTarget, index;
     });
   });
 }
