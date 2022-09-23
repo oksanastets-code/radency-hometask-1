@@ -80,6 +80,7 @@ function renderNewNote(name, created, category, content) {
     category,
     content,
   };
+
   if (!editTarget.length) {
     newNote.created = getCurrentDate();
   } else {
@@ -91,12 +92,18 @@ function renderNewNote(name, created, category, content) {
   }
 
   newNote.dates = getDates(content);
-  console.log(newNote);
+  // console.log(newNote);
 
   const newNoteRow = makeNotesTableRowMarkup(newNote);
   tbodyEl.insertAdjacentHTML('beforeend', newNoteRow);
-  if (!editTarget.length) {
-  } else {
+
+  if (editTarget.length) {
+    const array = [...tbodyEl.children];
+    array.filter(item => {
+      if (item.hasAttribute('data-edit')) {
+        item.remove();
+      }
+    });
   }
 }
 // редагування запису
@@ -105,13 +112,15 @@ const getBtns = str => {
   return document.querySelectorAll(str);
 };
 function editNote(callback) {
-  const list = callback('.edit__button');
-  list.forEach(btn => {
+  const editBtns = callback('.edit__button');
+  editBtns.forEach(btn => {
     const editNoteData = {};
     btn.addEventListener('click', event => {
       const parent = btn.parentNode.parentNode;
+      console.log(parent);
 
       editTarget = [...btn.parentNode.parentNode.children];
+      console.log(editTarget);
       lightbox.classList.add('is-open');
       addNoteForm.classList.remove('visually-hidden');
       addBtn.style.display = 'none';
@@ -145,11 +154,13 @@ function editNote(callback) {
 
       // console.log('new editNoteData', editNoteData);
       // console.log(editTarget);
-parent.remove();
-      renderSummaryTable();
-      return editNoteData, editTarget;
-    });
 
+      // мітим рядок
+      parent.dataset.edit = true;
+      renderSummaryTable();
+
+      return editTarget;
+    });
   });
 }
 editNote(getBtns);
@@ -335,14 +346,14 @@ function getArchiveTableData(foo) {
 }
 
 // розархівування запису
-let unarchiveBtn = [];
+let unarchiveBtns = [];
 function getUnarchiveBtns() {
-  unarchiveBtn = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
-  unarchiveBtn.forEach(btn => {
+  unarchiveBtns = [...archiveTableEl.querySelectorAll('.unarchieve__button')];
+  unarchiveBtns.forEach(btn => {
     btn.addEventListener('click', event => {
       const parent = btn.parentNode.parentNode;
       const identity = parent.firstElementChild.textContent;
-      const index = unarchiveBtn.indexOf(btn);
+      const index = unarchiveBtns.indexOf(btn);
       archiveData.splice(index, 1);
       const arrayOfNamesTds = document.querySelectorAll('.js-name');
       arrayOfNamesTds.forEach(td => {
